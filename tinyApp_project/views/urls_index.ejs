@@ -17,7 +17,7 @@
     <% for (var shortURL in urls) { %>
     <tr>
       <td><a href="<%=urls[shortURL]%>"><%= shortURL %></a></td>
-      <td><%= urls[shortURL] %></td>
+      <td><a href="<%= urls[shortURL]%>"><%=urls[shortURL]%></a></td>
     </tr>
     <% } %>
   </tbody>
