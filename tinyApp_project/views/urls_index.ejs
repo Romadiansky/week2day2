@@ -20,9 +20,16 @@
     <tr>
       <td><a href="/urls/<%=shortURL%>"><%= shortURL %></a></td>
       <td><a href="<%= urls[shortURL]%>"><%=urls[shortURL]%></a></td>
-      <td>   <form action="/urls/<%=shortURL%>/delete" method="POST">
-        <input type="submit" id="DELETE" value="DELETE" style="width: 150px">
-          </form></td>
+      <td>
+        <form action="/urls/<%=shortURL%>/delete" method="POST">
+          <input type="submit" id="DELETE" value="DELETE" style="width: 90px">
+        </form>
+      </td>
+      <td>
+        <form action="/urls/<%=shortURL%>" method="GET">
+        <input type="submit" id="EDIT" value="EDIT" style="width:90px">
+      </form>
+      </td>
     </tr>
     <% } %>
   </tbody>
