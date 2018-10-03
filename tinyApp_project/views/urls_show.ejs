@@ -9,13 +9,19 @@
 <table>
   <thead>
     <tr>
-      <th>YOUR URL</th>
+      <th>YOUR tiny URL: <%=shortURL%></th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td><a href="<%=longURL%>"><%=longURL%></a></td>
-      <td><a href="<%=longURL%>"><%= shortURL %></a></td>
+      <td>
+        <form action="/urls/<%=shortURL%>/" method="POST" style="width:20px">
+          <input id="longURL" type="text" name="longURL" placeholder="<%=longURL%>" style="width: 250px;">
+      </td>
+      <td>
+          <input type="submit" id="UPDATE" value="UPDATE" style="width:60px">
+        </form>
+      </td>
     </tr>
   </tbody>
 </table>

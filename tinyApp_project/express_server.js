@@ -22,19 +22,19 @@ var urlDatabase = {
   "9sm5xK": "http://www.google.com"
 };
 
-
+//new url entry
 app.post("/urls", (req, res) => {
   console.log(req.body);
   let longURL = req.body.longURL;
-  updateDatabase(longURL);
-  // res.send(shortURL);
-  res.redirect(`/urls/${longURL}`);
+  let shortURL = updateDatabase(longURL);
+  res.redirect(`/urls/${shortURL}`);
 });
 
 function updateDatabase(longURL) {
   let shortURL = generateRandomString();
   urlDatabase[shortURL] = longURL;
   console.log(urlDatabase);
+  return shortURL;
 };
 
 app.get("/u/:shortURL", (req, res) => {
@@ -42,8 +42,6 @@ app.get("/u/:shortURL", (req, res) => {
   let longURL = urlDatabase[shortURL];
   res.redirect(longURL);
 });
-
-
 
 
 app.get("/", (req, res) => {
@@ -76,6 +74,15 @@ app.get("/urls/:id", (req, res) => {
    };
    console.log(req.params);
   res.render("urls_show", templateVars);
+});
+
+//updates short urls
+app.post("/urls/:id/", (req, res) => {
+  let shortURL = req.params.id;
+  let longURL = req.body.longURL;
+  urlDatabase[shortURL] = longURL;
+  console.log(urlDatabase);
+  res.redirect(/urls/);
 });
 
 app.post("/urls/:id/delete", (req, res) => {
