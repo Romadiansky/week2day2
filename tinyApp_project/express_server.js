@@ -77,3 +77,8 @@ app.get("/urls/:id", (req, res) => {
    console.log(req.params);
   res.render("urls_show", templateVars);
 });
+
+app.post("/urls/:id/delete", (req, res) => {
+  delete urlDatabase[req.params.id];
+  res.redirect(/urls/);
+});
