@@ -83,10 +83,19 @@ app.post("/logout", (req, res) => {
 
 //new urls get entered here
 app.get("/urls/new", (req, res) => {
-  res.render("urls_new");
+  let templateVars = {
+    username: req.cookies["username"]
+  };
+  res.render("urls_new", templateVars);
 });
 
 //objects in my templateVar get stored here, including cookies
+
+//redirects to shortURL page featuring one entry
+app.get("/urls/:id/edit", (req, res) => {
+  let shortURL =req.params.id;
+  res.redirect(`/urls/${shortURL}`);
+});
 
 app.get("/urls/:id", (req, res) => {
   let templateVars = {
@@ -98,22 +107,16 @@ app.get("/urls/:id", (req, res) => {
   res.render("urls_show", templateVars);
 });
 
-//updates short urls
-app.post("/urls/:id/", (req, res) => {
-  let shortURL = req.params.id;
-  let longURL = req.body.longURL;
-  urlDatabase[shortURL] = longURL;
-  res.redirect("/urls");
-});
-
 //deletes an entry
 app.post("/urls/:id/delete", (req, res) => {
   delete urlDatabase[req.params.id];
   res.redirect("/urls");
 });
 
-//redirects to shortURL page featuring one entry
-app.get("/urls/:id/edit", (req, res) => {
-  let shortURL =req.params.id;
-  res.redirect(`/urls/${shortURL}`);
+//updates short urls
+app.post("/urls/:id", (req, res) => {
+  let shortURL = req.params.id;
+  let longURL = req.body.longURL;
+  urlDatabase[shortURL] = longURL;
+  res.redirect("/urls");
 });
