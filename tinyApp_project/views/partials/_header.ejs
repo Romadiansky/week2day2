@@ -10,8 +10,11 @@
   </h2>
   <% if (username) {%>
   <p><%=username%>
+    <form action="/logout" method="POST" style="margin:20px;">
+      <input type="submit" value="logout">
+    </form>
   </p>
-  <%}%>
+  <%} else {%>
 
 </head>
 <body style="font-size:15px"; padding="20px";>
@@ -20,6 +23,7 @@
       <input id="username" type="text" name="username" placeholder="Tiny Tom/" style="width: 90px">
       <input type="submit" value="Submit">
     </form>
+    <%}%>
 </body>
 <footer>
 </footer>
