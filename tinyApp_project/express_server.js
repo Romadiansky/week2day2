@@ -80,9 +80,12 @@ app.post("/logout", (req, res) => {
   res.redirect(`/urls`);
 });
 
+//new urls get entered here
 app.get("/urls/new", (req, res) => {
   res.render("urls_new");
 });
+
+//objects in my templateVar get stored here, including cookies
 
 app.get("/urls/:id", (req, res) => {
   let templateVars = {
@@ -102,11 +105,13 @@ app.post("/urls/:id/", (req, res) => {
   res.redirect("/urls");
 });
 
+//deletes an entry
 app.post("/urls/:id/delete", (req, res) => {
   delete urlDatabase[req.params.id];
   res.redirect("/urls");
 });
 
+//redirects to shortURL page featuring one entry
 app.get("/urls/:id/edit", (req, res) => {
   let shortURL =req.params.id;
   res.redirect(`/urls/${shortURL}`);
