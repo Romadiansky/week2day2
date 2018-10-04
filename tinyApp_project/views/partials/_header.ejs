@@ -4,13 +4,20 @@
 
 <head>
   <title>TinyApp</title>
-  <h2>making URLs tinier than ever
+  <h1 style="font-size:16px";padding="10px"; margin="10px";>MAKING THE WORLD FIT MORE STUFF
+  </h1>
+   <h2 style="font-size:10px"; padding="10px"; margin="10px";>ONE TINY URL AT A TIME
   </h2>
+  <% if (username) {%>
+  <p><%=username%>
+  </p>
+  <%}%>
+
 </head>
-<body style="font-size:20px"; padding="60px";>
-    <form action="/urls" method="POST" style="margin:150px;">
-      <label for="username">username, please:</label>
-      <input id="username" type="text" name="username" placeholder="Tiny Tom" style="width: 1900px">
+<body style="font-size:15px"; padding="20px";>
+    <form action="/login" method="POST" style="margin:90px;">
+      <label for="username">enter name</label>
+      <input id="username" type="text" name="username" placeholder="Tiny Tom/" style="width: 90px">
       <input type="submit" value="Submit">
     </form>
 </body>

@@ -17,7 +17,6 @@ function generateRandomString(){
     return key;
 }
 
-
 var urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
@@ -62,8 +61,17 @@ app.get("/hello", (req, res) => {
 });
 
 app.get("/urls", (req, res) => {
-  let templateVars = { urls: urlDatabase };
+  let templateVars = {
+    urls: urlDatabase,
+    username: req.cookies["username"]
+   };
   res.render("urls_index", templateVars);
+});
+
+//login entry
+app.post("/login", (req, res) => {
+  res.cookie('username', req.body.username);
+  res.redirect(`/urls`);
 });
 
 app.get("/urls/new", (req, res) => {
@@ -73,7 +81,8 @@ app.get("/urls/new", (req, res) => {
 app.get("/urls/:id", (req, res) => {
   let templateVars = {
     shortURL: req.params.id,
-    longURL: urlDatabase[req.params.id]
+    longURL: urlDatabase[req.params.id],
+    username: req.cookies["username"]
    };
    console.log(req.params);
   res.render("urls_show", templateVars);
@@ -84,7 +93,6 @@ app.post("/urls/:id/", (req, res) => {
   let shortURL = req.params.id;
   let longURL = req.body.longURL;
   urlDatabase[shortURL] = longURL;
-  console.log(urlDatabase);
   res.redirect("/urls");
 });
 
