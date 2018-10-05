@@ -22,9 +22,21 @@ var urlDatabase = {
   "9sm5xK": "http://www.google.com"
 };
 
+var users = {
+  "user1": {
+    id: "user1",
+    email: "user1@email.com",
+    password: "12345"
+  },
+  "user2": {
+    id: "user2",
+    email: "user2@email.com",
+    password: "qwerty"
+  }
+}
+
 //new url entry
 app.post("/urls", (req, res) => {
-  console.log(req.body);
   let longURL = req.body.longURL;
   let shortURL = createNewURL(longURL);
   res.redirect(`/urls/${shortURL}`);
@@ -33,7 +45,6 @@ app.post("/urls", (req, res) => {
 function createNewURL(longURL) {
   let shortURL = generateRandomString();
   urlDatabase[shortURL] = longURL;
-  console.log(urlDatabase);
   return shortURL;
 };
 
@@ -45,7 +56,11 @@ app.get("/u/:shortURL", (req, res) => {
 
 
 app.get("/", (req, res) => {
-  res.send("Hello!");
+  if (!users[req.cookies["user_id"]]){
+    res.redirect("/login");
+  } else {
+    res.redirect("/urls");
+  }
 });
 
 app.listen(PORT, () => {
@@ -63,51 +78,108 @@ app.get("/hello", (req, res) => {
 app.get("/urls", (req, res) => {
   let templateVars = {
     urls: urlDatabase,
-    username: req.cookies["username"]
+    user: users[req.cookies["user_id"]]
    };
   res.render("urls_index", templateVars);
 });
 
-//login entry
-app.post("/login", (req, res) => {
-  res.cookie('username', req.body.username);
+//register!!!
+app.get("/register", (req, res) => {
+  let templateVars = {
+    urls: urlDatabase,
+    user: users[req.cookies["user_id"]]
+   };
+  res.render("register", templateVars);
+});
+
+//registration form
+app.post("/register", (req, res) => {
+  let newUser = {
+    id: generateRandomString(),
+    email: req.body.email,
+    password: req.body.password
+  };
+
+  if (newUser.email === "" || newUser.password === "") {
+    res.statusCode = 400;
+    res.end("error -- please make sure you've entered both your email and password!");
+  }
+
+  for (var userKey in users) {
+    if (newUser["email"] === users[userKey]["email"]) {
+      console.log("error");
+      res.statusCode = 400;
+      res.end("sorry, that email address is already registered!");
+    }
+  }
+
+  users[newUser["id"]] = newUser;
+  res.cookie("user_id", newUser["id"]);
   res.redirect(`/urls`);
 });
+
+//login request
+app.get("/login", (req, res) => {
+  res.render("login", templateVars);
+});
+
+//login entry
+app.post("/login", (req, res) => {
+  for (var userKey in users) {
+    if (req.body.email === users[userKey].email
+    && req.body.password === users[userKey].password) {
+      res.cookie('user_id', userKey);
+      res.redirect(`/`);
+      return;
+    }
+  }
+  res.statusCode = 403;
+  res.end("nope; not a valid login");
+});
+
 
 //logout
 app.post("/logout", (req, res) => {
-  res.clearCookie('username');
+  res.clearCookie('user_id');
   res.redirect(`/urls`);
 });
 
+//new urls get entered here
 app.get("/urls/new", (req, res) => {
-  res.render("urls_new");
+  let templateVars = {
+    user: users[req.cookies["user_id"]]
+  };
+  res.render("urls_new", templateVars);
+});
+
+//objects in my templateVar get stored here, including cookies
+
+//redirects to shortURL page featuring one entry
+app.get("/urls/:id/edit", (req, res) => {
+  let shortURL =req.params.id;
+  res.redirect(`/urls/${shortURL}`, templateVars);
 });
 
 app.get("/urls/:id", (req, res) => {
   let templateVars = {
     shortURL: req.params.id,
     longURL: urlDatabase[req.params.id],
-    username: req.cookies["username"]
+    user: users[req.cookies["user_id"]]
    };
    console.log(req.params);
   res.render("urls_show", templateVars);
 });
 
-//updates short urls
-app.post("/urls/:id/", (req, res) => {
-  let shortURL = req.params.id;
-  let longURL = req.body.longURL;
-  urlDatabase[shortURL] = longURL;
-  res.redirect("/urls");
-});
-
+//deletes an entry
 app.post("/urls/:id/delete", (req, res) => {
   delete urlDatabase[req.params.id];
   res.redirect("/urls");
 });
 
-app.get("/urls/:id/edit", (req, res) => {
-  let shortURL =req.params.id;
-  res.redirect(`/urls/${shortURL}`);
+//updates short urls
+app.post("/urls/:id", (req, res) => {
+  let shortURL = req.params.id;
+  let longURL = req.body.longURL;
+  urlDatabase[shortURL] = longURL;
+  res.redirect("/urls");
 });

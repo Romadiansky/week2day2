@@ -1,7 +1,8 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 
 <html lang="en">
 <header>
+  <title>TinyApp</title>
   <% include ./partials/_header %>
   </header>
 <body>
@@ -16,7 +17,7 @@
     <tr>
       <td>
         <form action="/urls/<%=shortURL%>/" method="POST" style="width:20px">
-          <input id="longURL" type="text" name="longURL" placeholder="<%=longURL%>" style="width: 250px;">
+          <input id="longURL" type="text" name="longURL" value="<%=longURL%>" style="width: 250px;">
       </td>
       <td>
           <input type="submit" id="UPDATE" value="UPDATE" style="width:60px">
@@ -25,7 +26,5 @@
     </tr>
   </tbody>
 </table>
-
-    <!-- Add your EJS code here -->
 </body>
 </html>

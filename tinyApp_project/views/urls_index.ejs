@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-
-
 <html lang="en">
+
 <header>
+  <title>TinyApp</title>
   <% include ./partials/_header %>
   </header>
 <body>
@@ -10,8 +10,8 @@
 <table>
   <thead>
     <tr>
-      <th>Short URL</th>
-      <th>Long URL</th>
+      <th>tiny URL</th>
+      <th>not-so-tiny URL</th>
 
     </tr>
   </thead>
@@ -22,19 +22,17 @@
       <td><a href="<%= urls[shortURL]%>"><%=urls[shortURL]%></a></td>
       <td>
         <form action="/urls/<%=shortURL%>/delete" method="POST">
-          <input type="submit" id="DELETE" value="DELETE" style="width: 90px">
+          <input type="submit" id="DELETE" value="DELETE" style="width: 60px">
         </form>
       </td>
       <td>
         <form action="/urls/<%=shortURL%>" method="GET">
-        <input type="submit" id="EDIT" value="EDIT" style="width:90px">
+        <input type="submit" id="EDIT" value="EDIT" style="width:60px">
       </form>
       </td>
     </tr>
     <% } %>
   </tbody>
 </table>
-
-    <!-- Add your EJS code here -->
 </body>
 </html>

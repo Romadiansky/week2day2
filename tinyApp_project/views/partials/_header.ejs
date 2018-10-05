@@ -4,26 +4,24 @@
 
 <head>
   <title>TinyApp</title>
-  <h1 style="font-size:16px";padding="10px"; margin="10px";>MAKING THE WORLD FIT MORE STUFF
+</head>
+
+<body style="font-size:15px" padding="20px">
+
+  <h1 style="font-size:16px" padding="10px" margin="10px">MAKING THE WORLD FIT MORE STUFF <br />
+  <span style="font-size:10px" padding="10px" margin="10px">ONE TINY URL AT A TIME </span>
   </h1>
-   <h2 style="font-size:10px"; padding="10px"; margin="10px";>ONE TINY URL AT A TIME
-  </h2>
-  <% if (username) {%>
-  <p><%=username%>
+
+  <% if (user) {%>
+  <p><%=user["email"]%>
     <form action="/logout" method="POST" style="margin:20px;">
       <input type="submit" value="logout">
     </form>
   </p>
   <%} else {%>
-
-</head>
-<body style="font-size:15px"; padding="20px";>
-    <form action="/login" method="POST" style="margin:90px;">
-      <label for="username">enter name</label>
-      <input id="username" type="text" name="username" placeholder="Tiny Tom/" style="width: 90px">
-      <input type="submit" value="Submit">
-    </form>
-    <%}%>
+    <a href="/register">register</a><br />
+    <a href="/login">login</a>
+  <%}%>
 </body>
 <footer>
 </footer>
