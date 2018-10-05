@@ -85,7 +85,11 @@ app.get("/urls", (req, res) => {
 
 //register!!!
 app.get("/register", (req, res) => {
-  res.render("register");
+  let templateVars = {
+    urls: urlDatabase,
+    user: users[req.cookies["user_id"]]
+   };
+  res.render("register", templateVars);
 });
 
 //registration form
@@ -116,7 +120,7 @@ app.post("/register", (req, res) => {
 
 //login request
 app.get("/login", (req, res) => {
-  res.render("login");
+  res.render("login", templateVars);
 });
 
 //login entry
@@ -153,7 +157,7 @@ app.get("/urls/new", (req, res) => {
 //redirects to shortURL page featuring one entry
 app.get("/urls/:id/edit", (req, res) => {
   let shortURL =req.params.id;
-  res.redirect(`/urls/${shortURL}`);
+  res.redirect(`/urls/${shortURL}`, templateVars);
 });
 
 app.get("/urls/:id", (req, res) => {
