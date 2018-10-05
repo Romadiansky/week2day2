@@ -14,8 +14,8 @@
 
   <a href="/register">register</a>
 
-  <% if (username) {%>
-  <p><%=username%>
+  <% if (user) {%>
+  <p><%=user["email"]%>
     <form action="/logout" method="POST" style="margin:20px;">
       <input type="submit" value="logout">
     </form>
