@@ -97,14 +97,15 @@ app.post("/register", (req, res) => {
 
   if (newUser.email === "" || newUser.password === "") {
     res.statusCode = 400;
-    res.end("error -- please make sure you've entered both your email and password!");
+    res.end(`eror
+      please make sure to enter both your email and your password!`);
   }
 
   for (var userKey in users) {
     if (newUser["email"] === users[userKey]["email"]) {
       console.log("error");
       res.statusCode = 400;
-      res.end("sorry, that email address is already registered!");
+      res.end("sorry, that email address is already registered.");
     }
   }
 
@@ -115,6 +116,9 @@ app.post("/register", (req, res) => {
 
 //login request
 app.get("/login", (req, res) => {
+  let templateVars = {
+    user: users[req.cookies["user_id"]]
+   };
   res.render("login", templateVars);
 });
 
@@ -129,7 +133,7 @@ app.post("/login", (req, res) => {
     }
   }
   res.statusCode = 403;
-  res.end("nope; not a valid login");
+  res.end("nope -- try again");
 });
 
 //logout
@@ -148,6 +152,9 @@ app.get("/urls/new", (req, res) => {
 
 //redirects to shortURL page featuring one entry
 app.get("/urls/:id/edit", (req, res) => {
+  let templateVars = {
+    user: users[req.cookies["user_id"]]
+   };
   let shortURL = req.params.id;
   res.redirect(`/urls/${shortURL}`, templateVars);
 });
