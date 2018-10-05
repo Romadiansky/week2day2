@@ -22,6 +22,19 @@ var urlDatabase = {
   "9sm5xK": "http://www.google.com"
 };
 
+var users = {
+  "user1": {
+    id: "user1",
+    email: "user1@email.com",
+    password: "12345"
+  },
+  "user2": {
+    id: "user2",
+    email: "user2@email.com",
+    password: "qwerty"
+  }
+}
+
 //new url entry
 app.post("/urls", (req, res) => {
   console.log(req.body);
@@ -67,6 +80,15 @@ app.get("/urls", (req, res) => {
    };
   res.render("urls_index", templateVars);
 });
+
+//register!!!
+app.get("/register", (req, res) => {
+  res.render("register");
+});
+
+// app.post("/register", (req, res) => {
+
+// });
 
 //login entry
 app.post("/login", (req, res) => {
