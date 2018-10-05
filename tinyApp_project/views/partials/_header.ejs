@@ -12,8 +12,6 @@
   <span style="font-size:10px" padding="10px" margin="10px">ONE TINY URL AT A TIME </span>
   </h1>
 
-  <a href="/register">register</a>
-
   <% if (user) {%>
   <p><%=user["email"]%>
     <form action="/logout" method="POST" style="margin:20px;">
@@ -21,13 +19,8 @@
     </form>
   </p>
   <%} else {%>
-  <p>
-    <form action="/login" method="POST" style="margin:90px;">
-      <label for="username">enter name</label>
-      <input id="username" type="text" name="username" placeholder="Tiny Tom/" style="width: 90px">
-      <input type="submit" value="Submit">
-    </form>
-  </p>
+    <a href="/register">register</a><br />
+    <a href="/login">login</a>
   <%}%>
 </body>
 <footer>
