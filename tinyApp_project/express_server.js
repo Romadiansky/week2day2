@@ -84,14 +84,32 @@ app.get("/register", (req, res) => {
   res.render("register");
 });
 
+//registration form
 app.post("/register", (req, res) => {
-  newUser = {};
-  newUser["id"] = generateRandomString();
-  newUser["email"] = req.body.email;
-  newUser["password"] = req.body.password;
+  let newUser = {
+    id: generateRandomString(),
+    email: req.body.email,
+    password: req.body.password
+  };
+
+  // console.log(newUser);
+  // console.log(users);
+
+  if (newUser.email === "" || newUser.password === "") {
+    res.statusCode = 400;
+    res.end("error -- please make sure you've entered both your email and password!");
+  }
+
+  for (var userKey in users) {
+    if (newUser["email"] === users[userKey]["email"]) {
+      console.log("error");
+      res.statusCode = 400;
+      res.end("sorry, that email address is already registered!");
+    }
+  }
+
   users[newUser["id"]] = newUser;
   res.cookie("user_id", newUser["id"]);
-  console.log(users);
   res.redirect(`/urls`);
 });
 
