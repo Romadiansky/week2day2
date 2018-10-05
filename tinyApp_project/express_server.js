@@ -37,7 +37,6 @@ var users = {
 
 //new url entry
 app.post("/urls", (req, res) => {
-  console.log(req.body);
   let longURL = req.body.longURL;
   let shortURL = createNewURL(longURL);
   res.redirect(`/urls/${shortURL}`);
@@ -46,7 +45,6 @@ app.post("/urls", (req, res) => {
 function createNewURL(longURL) {
   let shortURL = generateRandomString();
   urlDatabase[shortURL] = longURL;
-  console.log(urlDatabase);
   return shortURL;
 };
 
@@ -86,9 +84,16 @@ app.get("/register", (req, res) => {
   res.render("register");
 });
 
-// app.post("/register", (req, res) => {
-
-// });
+app.post("/register", (req, res) => {
+  newUser = {};
+  newUser["id"] = generateRandomString();
+  newUser["email"] = req.body.email;
+  newUser["password"] = req.body.password;
+  users[newUser["id"]] = newUser;
+  res.cookie("user_id", newUser["id"]);
+  console.log(users);
+  res.redirect(`/urls`);
+});
 
 //login entry
 app.post("/login", (req, res) => {
