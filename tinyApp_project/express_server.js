@@ -19,8 +19,8 @@ function generateRandomString(){
 }
 
 var urlDatabase = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com"
+  "b2xVn2": {userID: "user1", longURL: "http://www.lighthouselabs.ca"},
+  "9sm5xK": {userID: "user2", longURL: "http://www.google.com"}
 };
 
 var users = {
@@ -38,7 +38,7 @@ var users = {
 
 function createNewURL(longURL) {
   let shortURL = generateRandomString();
-  urlDatabase[shortURL] = longURL;
+  urlDatabase[shortURL][longURL] = longURL;
   return shortURL;
 };
 
