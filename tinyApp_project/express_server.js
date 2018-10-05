@@ -64,6 +64,9 @@ app.get("/", (req, res) => {
 });
 
 app.get("/urls.json", (req, res) => {
+  let templateVars = {
+    user: users[req.cookies["user_id"]]
+   };
   res.json(urlDatabase);
 });
 
