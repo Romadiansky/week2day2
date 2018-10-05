@@ -56,7 +56,11 @@ app.get("/u/:shortURL", (req, res) => {
 
 
 app.get("/", (req, res) => {
-  res.send("Hello!");
+  if (!users[req.cookies["user_id"]]){
+    res.redirect("/login");
+  } else {
+    res.redirect("/urls");
+  }
 });
 
 app.listen(PORT, () => {
@@ -132,7 +136,7 @@ app.post("/login", (req, res) => {
 
 //logout
 app.post("/logout", (req, res) => {
-  res.clearCookie('username');
+  res.clearCookie('user_id');
   res.redirect(`/urls`);
 });
 
