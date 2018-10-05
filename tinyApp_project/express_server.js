@@ -74,7 +74,7 @@ app.get("/hello", (req, res) => {
 app.get("/urls", (req, res) => {
   let templateVars = {
     urls: urlDatabase,
-    username: req.cookies["username"]
+    user: users[req.cookies["user_id"]]
    };
   res.render("urls_index", templateVars);
 });
@@ -91,9 +91,6 @@ app.post("/register", (req, res) => {
     email: req.body.email,
     password: req.body.password
   };
-
-  // console.log(newUser);
-  // console.log(users);
 
   if (newUser.email === "" || newUser.password === "") {
     res.statusCode = 400;
@@ -113,10 +110,23 @@ app.post("/register", (req, res) => {
   res.redirect(`/urls`);
 });
 
+//login request
+app.get("/login", (req, res) => {
+  res.render("login");
+});
+
 //login entry
 app.post("/login", (req, res) => {
-  res.cookie('username', req.body.username);
-  res.redirect(`/urls`);
+  for (var userKey in users) {
+    if (req.body.email === users[userKey].email
+    && req.body.password === users[userKey].password) {
+      res.cookie('user_id', userKey);
+      res.redirect(`/`);
+      return;
+    }
+  }
+  res.statusCode = 403;
+  res.end("nope; not a valid login");
 });
 
 
@@ -129,7 +139,7 @@ app.post("/logout", (req, res) => {
 //new urls get entered here
 app.get("/urls/new", (req, res) => {
   let templateVars = {
-    username: req.cookies["username"]
+    user: users[req.cookies["user_id"]]
   };
   res.render("urls_new", templateVars);
 });
@@ -146,7 +156,7 @@ app.get("/urls/:id", (req, res) => {
   let templateVars = {
     shortURL: req.params.id,
     longURL: urlDatabase[req.params.id],
-    username: req.cookies["username"]
+    user: users[req.cookies["user_id"]]
    };
    console.log(req.params);
   res.render("urls_show", templateVars);
