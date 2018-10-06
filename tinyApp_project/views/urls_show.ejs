@@ -10,13 +10,14 @@
 <table>
   <thead>
     <tr>
-      <th>YOUR tiny URL: <%=shortURL%></th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td>
         <% if (user) {%>
+        <p>your tiny treasure trolly: <%=shortURL%></p>
         <form action="/urls/<%=shortURL%>/" method="POST" style="width:20px">
           <input id="longURL" type="text" name="longURL" value="<%=longURL%>" style="width: 250px;">
       </td>
@@ -24,6 +25,8 @@
           <input type="submit" id="UPDATE" value="UPDATE" style="width:60px">
         </form>
   <%} else {%>
+
+  <p> go ahead and log in <br />tiny treasures await </p>
     <a href="/register">register</a><br />
     <a href="/login">login</a>
   <%}%>

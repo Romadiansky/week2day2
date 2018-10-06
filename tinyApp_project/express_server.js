@@ -186,8 +186,11 @@ app.get("/urls/:id", (req, res) => {
     longURL: urlDatabase[req.params.id].longURL,
     user: users[req.cookies["user_id"]]
   };
-  console.log(req.params);
-  res.render("urls_show", templateVars);
+  if (req.cookies["user_id"] === urlDatabase[req.params.id].userID) {
+    res.render("urls_show", templateVars);
+  } else {
+    res.end("can't edit what's not yours");
+  }
 });
 
 //deletes an entry
