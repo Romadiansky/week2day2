@@ -36,27 +36,31 @@ var users = {
   }
 }
 
-function createNewURL(longURL) {
+function createNewURL(longURL, req) {
   let shortURL = generateRandomString();
-  urlDatabase[shortURL][longURL] = longURL;
+  urlDatabase[shortURL] = {
+    userID: req.cookies["user_id"],
+    longURL: longURL
+  };
+  console.log(urlDatabase);
   return shortURL;
 };
 
 //new url entry
 app.post("/urls", (req, res) => {
   let longURL = req.body.longURL;
-  let shortURL = createNewURL(longURL);
+  let shortURL = createNewURL(longURL, req);
   res.redirect(`/urls/${shortURL}`);
 });
 
 app.get("/u/:shortURL", (req, res) => {
   var shortURL = req.params.shortURL;
-  let longURL = urlDatabase[shortURL];
+  let longURL = urlDatabase[shortURL].longURL;
   res.redirect(longURL);
 });
 
 app.get("/", (req, res) => {
-  if (!users[req.cookies["user_id"]]){
+  if (!users[req.cookies["user_id"]]) {
     res.redirect("/login");
   } else {
     res.redirect("/urls");
@@ -165,7 +169,7 @@ app.get("/urls/:id/edit", (req, res) => {
 app.get("/urls/:id", (req, res) => {
   let templateVars = {
     shortURL: req.params.id,
-    longURL: urlDatabase[req.params.id],
+    longURL: urlDatabase[req.params.id].longURL,
     user: users[req.cookies["user_id"]]
   };
   console.log(req.params);
@@ -182,7 +186,7 @@ app.post("/urls/:id/delete", (req, res) => {
 app.post("/urls/:id", (req, res) => {
   let shortURL = req.params.id;
   let longURL = req.body.longURL;
-  urlDatabase[shortURL] = longURL;
+  urlDatabase[shortURL].longURL = longURL;
   res.redirect("/urls");
 });
 
