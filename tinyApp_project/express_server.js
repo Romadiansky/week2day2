@@ -78,9 +78,19 @@ app.get("/hello", (req, res) => {
   res.send("<html><body>Hello <b>World</b></body></html>\n");
 });
 
+function urlsForUser(id) {
+  let filteredObj = {};
+  for (var k in urlDatabase) {
+    if (urlDatabase[k].userID === id) {
+      filteredObj[k] = urlDatabase[k];
+    }
+  }
+  return filteredObj;
+}
+
 app.get("/urls", (req, res) => {
   let templateVars = {
-    urls: urlDatabase,
+    urls: urlsForUser(req.cookies["user_id"]),
     user: users[req.cookies["user_id"]]
    };
   res.render("urls_index", templateVars);
