@@ -1,37 +1,32 @@
- <!DOCTYPE html>
-
-<html lang="en">
-<head>
-  <title>TinyApp</title>
-</head>
-<body>
+<% let pageTitle = "TinyApp - URL" %>
 <% include ./partials/_header %>
-<table>
-  <thead>
-    <tr>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>
-        <% if (user) {%>
-        <p>your tiny treasure trolly: <%=shortURL%></p>
-        <form action="/urls/<%=shortURL%>/" method="POST" style="width:20px">
-          <input id="longURL" type="text" name="longURL" value="<%=longURL%>" style="width: 250px;">
-      </td>
-      <td>
-          <input type="submit" id="UPDATE" value="UPDATE" style="width:60px">
-        </form>
-  <%} else {%>
 
+<% if (user) {%>
+<p>your tiny treasure trolly now includes: <%=shortURL%></p>
+  <table>
+    <thead>
+      <tr>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <form action="/urls/<%=shortURL%>/" method="POST" style="width:20px;">
+          <td>
+              <input id="longURL" type="text" name="longURL" value="<%=longURL%>" style="width: 250px;">
+          </td>
+          <td>
+              <input type="submit" id="UPDATE" value="UPDATE" style="width:60px">
+          </td>
+        </form>
+      </tr>
+    </tbody>
+  </table>
+  <p>click <a href="/urls"> to see your complete treasure collection</a></p>
+<%} else {%>
   <p> go ahead and log in <br />tiny treasures await </p>
-    <a href="/register">register</a><br />
-    <a href="/login">login</a>
-  <%}%>
-      </td>
-    </tr>
-  </tbody>
-</table>
+  <a href="/register">register</a><br />
+  <a href="/login">login</a>
+<%}%>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-  <title>TinyApp</title>
+  <title><%= pageTitle %></title>
 </head>
 
 <body style="font-size:15px" padding="20px">
@@ -11,12 +11,12 @@
   <span style="font-size:10px" padding="10px" margin="10px">ONE TINY URL AT A TIME </span>
   </h1>
 
-    <% if (user) {%>
-  <p><%=user["email"]%>
-    <form action="/logout" method="POST" style="margin:20px;">
-      <input type="submit" value="logout">
-    </form>
-  </p>
+  <% if (user) {%>
+    <p><%=user["email"]%>
+      <form action="/logout" method="POST" style="margin:20px;">
+        <input type="submit" value="logout">
+      </form>
+    </p>
   <%} else {%>
     <span style="font-size: 9.5px">
     <a href="/register">register</a><br />
@@ -24,7 +24,4 @@
     </span>
   <%}%>
 
-</body>
-<footer>
-</footer>
 
