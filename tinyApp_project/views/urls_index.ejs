@@ -1,24 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<header>
+<head>
   <title>TinyApp</title>
-  <% include ./partials/_header %>
-  </header>
+</head>
 <body>
+    <% include ./partials/_header %>
     <% if (user) {%>
+    <p>
+      let's <a href="/urls/new">shrink</a> some links</p>
     <% for (var shortURL in urls) { %>
 <table>
   <thead>
     <tr>
+      <span style="font-size:9.5px">
       <th>tiny URL</th>
       <th>not-so-tiny URL</th>
+      </span>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td><a href="/urls/<%=shortURL%>"><%= shortURL %></a></td>
-      <td><a href="<%= urls[shortURL].longURL%>"><%=urls[shortURL].longURL%></a></td>
+      <td><a target="_blank" href="<%= urls[shortURL].longURL%>"><%=urls[shortURL].longURL%></a></td>
       <td>
         <form action="/urls/<%=shortURL%>/delete" method="POST">
           <input type="submit" id="DELETE" value="DELETE" style="width: 60px">
@@ -34,9 +38,7 @@
 </table>
     <% } %>
     <%} else {%>
-    <p>log in to shrink stuff!</p>
-    <a href="/register">register</a><br />
-    <a href="/login">login</a>
+    <p>error <br /> you must <a href="/login">log in</a> to shrink stuff!</p>
     <%}%>
 </body>
 </html>

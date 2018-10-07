@@ -102,9 +102,6 @@ app.get("/urls", (req, res) => {
     urls: urlsForUser(req.session["user_id"]),
     user: users[req.session["user_id"]]
    };
-   // console.log(users);
-   // console.log(req.session.user_id);
-   // console.log(req.session["user_id"]);
 
   res.render("urls_index", templateVars);
 });
@@ -135,7 +132,8 @@ app.post("/register", (req, res) => {
     if (newUser["email"] === users[userKey]["email"]) {
       console.log("error");
       res.statusCode = 400;
-      res.end("sorry, that email address is already registered.");
+      res.end(`oops
+        that email address is already registered`);
     }
   }
 
