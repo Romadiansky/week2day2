@@ -192,16 +192,20 @@ app.get("/urls/:id/edit", (req, res) => {
   res.redirect(`/urls/${shortURL}`, templateVars);
 });
 
+///urls/any short URL, including ones that don't exist
 app.get("/urls/:id", (req, res) => {
-  let templateVars = {
-    shortURL: req.params.id,
-    longURL: urlDatabase[req.params.id].longURL,
-    user: users[req.session["user_id"]]
-  };
-  if (req.session["user_id"] === urlDatabase[req.params.id].userID) {
-    res.render("urls_show", templateVars);
-  } else {
+  if (!urlDatabase[req.params.id]) {
+    res.end("oops \ncheck your URL");
+  }
+  else if (!(req.session["user_id"] === urlDatabase[req.params.id].userID)) {
     res.end("can't edit what's not yours");
+  } else {
+    let templateVars = {
+      shortURL: req.params.id,
+      longURL: urlDatabase[req.params.id].longURL,
+      user: users[req.session["user_id"]]
+    };
+    res.render("urls_show", templateVars);
   }
 });
 
