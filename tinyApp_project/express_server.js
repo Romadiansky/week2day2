@@ -9,7 +9,7 @@ app.set("view engine", "ejs");
 // app.use(cookieParser());
 app.use(cookieSession({
   name: 'session',
-  keys: [0],
+  keys: ["this is my secret string"],
   maxAge: 365 * 24 * 60 * 60 * 1000
 }))
 const bcrypt = require('bcrypt');
