@@ -35,6 +35,6 @@ step 3 -- manage your trolly:
 
 ## Getting Started
 
--Install all necessary dependencies using the 'npm install' command
--Run the development web server using 'node express_server.js'
--And enjoy a tidier, smaller world of more concise urls
+  - Install all necessary dependencies using the 'npm install' command
+  - Run the development web server using 'node express_server.js'
+  - And enjoy a tidier, smaller world of more concise urls
