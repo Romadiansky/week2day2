@@ -6,6 +6,9 @@ const cookieParser = require("cookie-parser");
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 app.use(cookieParser());
+const bcrypt = require('bcrypt');
+// const password = "purple-monkey-dinosaur"; // you will probably this from req.params
+// const hashedPassword = bcrypt.hashSync(password, 10);
 
 
 function generateRandomString(){
@@ -27,12 +30,12 @@ var users = {
   "user1": {
     id: "user1",
     email: "user1@email.com",
-    password: "12345"
+    hashedPassword: bcrypt.hashSync("12345", 10)
   },
   "user2": {
     id: "user2",
     email: "user2@email.com",
-    password: "qwerty"
+    hashedPassword: bcrypt.hashSync("qwerty", 10)
   }
 }
 
@@ -109,12 +112,12 @@ app.post("/register", (req, res) => {
   let newUser = {
     id: generateRandomString(),
     email: req.body.email,
-    password: req.body.password
+    hashedPassword: bcrypt.hashSync(req.body.password, 10)
   };
 
-  if (newUser.email === "" || newUser.password === "") {
+  if (newUser.email === "" || req.body.password === "") {
     res.statusCode = 400;
-    res.end(`eror
+    res.end(`error
       please make sure to enter both your email and your password!`);
   }
 
@@ -143,7 +146,7 @@ app.get("/login", (req, res) => {
 app.post("/login", (req, res) => {
   for (var userKey in users) {
     if (req.body.email === users[userKey].email
-    && req.body.password === users[userKey].password) {
+    && bcrypt.compareSync(req.body.password, users[userKey].hashedPassword)){
       res.cookie("user_id", userKey);
       res.redirect("/");
       return;
