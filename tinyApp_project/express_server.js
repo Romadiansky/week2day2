@@ -51,7 +51,6 @@ function createNewURL(longURL, req) {
     userID: req.session["user_id"],
     longURL: longURL
   };
-  console.log(urlDatabase);
   return shortURL;
 };
 
@@ -62,12 +61,14 @@ app.post("/urls", (req, res) => {
   res.redirect(`/urls/${shortURL}`);
 });
 
+//handles requests to redirect from short url links to original sources
 app.get("/u/:shortURL", (req, res) => {
   var shortURL = req.params.shortURL;
   let longURL = urlDatabase[shortURL].longURL;
   res.redirect(longURL);
 });
 
+//handles redirection depending on login status
 app.get("/", (req, res) => {
   if (!users[req.session["user_id"]]) {
     res.redirect("/login");
@@ -87,6 +88,7 @@ app.get("/hello", (req, res) => {
   res.send("<html><body>Hello <b>World</b></body></html>\n");
 });
 
+//filtering users db for user-specific dbxs
 function urlsForUser(id) {
   let filteredObj = {};
   for (var k in urlDatabase) {
@@ -97,6 +99,7 @@ function urlsForUser(id) {
   return filteredObj;
 }
 
+//on request of /urls
 app.get("/urls", (req, res) => {
   let templateVars = {
     urls: urlsForUser(req.session["user_id"]),
@@ -106,7 +109,7 @@ app.get("/urls", (req, res) => {
   res.render("urls_index", templateVars);
 });
 
-//register!!!
+//registration request comes in
 app.get("/register", (req, res) => {
   let templateVars = {
     user: users[req.session["user_id"]]
@@ -130,7 +133,6 @@ app.post("/register", (req, res) => {
 
   for (var userKey in users) {
     if (newUser["email"] === users[userKey]["email"]) {
-      console.log("error");
       res.statusCode = 400;
       res.end(`oops
         that email address is already registered`);
@@ -156,7 +158,6 @@ app.post("/login", (req, res) => {
     if (req.body.email === users[userKey].email
     && bcrypt.compareSync(req.body.password, users[userKey].hashedPassword)){
       req.session.user_id = userKey;
-      console.log(req.session.user_id);
       res.redirect("/urls");
       return;
     }
