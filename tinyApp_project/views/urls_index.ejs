@@ -16,7 +16,7 @@
       <tbody>
         <% for (var shortURL in urls) { %>
           <tr>
-            <td><a href="/urls/<%=shortURL%>"><%= shortURL %></a></td>
+            <td><a href="http://localhost:8080/u/<%=shortURL%>">http://localhost:8080/u/<%= shortURL %></a></td>
             <td><a target="_blank" href="<%= urls[shortURL].longURL%>"><%=urls[shortURL].longURL%></a></td>
             <td>
               <form action="/urls/<%=shortURL%>/delete" method="POST">
