@@ -1,7 +1,7 @@
-var express = require("express");
-var cookieSession = require("cookie-session")
-var app = express();
-var PORT = 8080;
+const express = require("express");
+const cookieSession = require("cookie-session")
+const app = express();
+const PORT = 8080;
 const bodyParser = require("body-parser");
 // const cookieParser = require("cookie-parser");
 app.use(bodyParser.urlencoded({extended: true}));
@@ -27,12 +27,12 @@ function generateRandomString(){
     return key;
 }
 
-var urlDatabase = {
+let urlDatabase = {
   "b2xVn2": {userID: "user1", longURL: "http://www.lighthouselabs.ca"},
   "9sm5xK": {userID: "user2", longURL: "http://www.google.com"}
 };
 
-var users = {
+let users = {
   "user1": {
     id: "user1",
     email: "user1@email.com",
@@ -63,7 +63,7 @@ app.post("/urls", (req, res) => {
 
 //handles requests to redirect from short url links to original sources
 app.get("/u/:shortURL", (req, res) => {
-  var shortURL = req.params.shortURL;
+  let shortURL = req.params.shortURL;
   let longURL = urlDatabase[shortURL].longURL;
   res.redirect(longURL);
 });
@@ -91,7 +91,7 @@ app.get("/hello", (req, res) => {
 //filtering users db for user-specific dbxs
 function urlsForUser(id) {
   let filteredObj = {};
-  for (var k in urlDatabase) {
+  for (let k in urlDatabase) {
     if (urlDatabase[k].userID === id) {
       filteredObj[k] = urlDatabase[k];
     }
@@ -129,13 +129,15 @@ app.post("/register", (req, res) => {
     res.statusCode = 400;
     res.end(`error
       please make sure to enter both your email and your password!`);
+    return;
   }
 
-  for (var userKey in users) {
+  for (let userKey in users) {
     if (newUser["email"] === users[userKey]["email"]) {
       res.statusCode = 400;
       res.end(`oops
         that email address is already registered`);
+      return;
     }
   }
 
@@ -154,7 +156,7 @@ app.get("/login", (req, res) => {
 
 //login entry
 app.post("/login", (req, res) => {
-  for (var userKey in users) {
+  for (let userKey in users) {
     if (req.body.email === users[userKey].email
     && bcrypt.compareSync(req.body.password, users[userKey].hashedPassword)){
       req.session.user_id = userKey;
