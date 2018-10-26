@@ -1,37 +1,36 @@
+// import dependencies
 const express = require("express");
-const cookieSession = require("cookie-session")
+const cookieSession = require("cookie-session");
 const app = express();
 const PORT = 8080;
 const bodyParser = require("body-parser");
-// const cookieParser = require("cookie-parser");
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
-// app.use(cookieParser());
 app.use(cookieSession({
   name: 'session',
   keys: ["this is my secret string"],
   maxAge: 365 * 24 * 60 * 60 * 1000
-}))
+}));
 const bcrypt = require('bcrypt');
-// const password = "purple-monkey-dinosaur"; // you will probably this from req.params
-// const hashedPassword = bcrypt.hashSync(password, 10);
 
-
-function generateRandomString(){
+// random string generator for URL shortening
+function generateRandomString() {
   let key = "";
   const characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
   for (let i = 0; i < 6; i++) {
-        key += characters.substr(Math.floor((Math.random() * characters.length)), 1);
-    }
-    return key;
+    key += characters.substr(Math.floor((Math.random() * characters.length)), 1);
+  }
+  return key;
 }
 
+// main DB for the program
 let urlDatabase = {
   "b2xVn2": {userID: "user1", longURL: "http://www.lighthouselabs.ca"},
   "9sm5xK": {userID: "user2", longURL: "http://www.google.com"}
 };
 
+// DB of users
 let users = {
   "user1": {
     id: "user1",
@@ -45,6 +44,7 @@ let users = {
   }
 }
 
+// generate a new URL stored in DB and return its short URL
 function createNewURL(longURL, req) {
   let shortURL = generateRandomString();
   urlDatabase[shortURL] = {
@@ -54,21 +54,21 @@ function createNewURL(longURL, req) {
   return shortURL;
 };
 
-//new url entry
+// handles new url submission
 app.post("/urls", (req, res) => {
   let longURL = req.body.longURL;
   let shortURL = createNewURL(longURL, req);
   res.redirect(`/urls/${shortURL}`);
 });
 
-//handles requests to redirect from short url links to original sources
+// handles requests to redirect from short url links to original sources
 app.get("/u/:shortURL", (req, res) => {
   let shortURL = req.params.shortURL;
   let longURL = urlDatabase[shortURL].longURL;
   res.redirect(longURL);
 });
 
-//handles redirection depending on login status
+// handles root requests, redirecting depending on login status
 app.get("/", (req, res) => {
   if (!users[req.session["user_id"]]) {
     res.redirect("/login");
@@ -77,6 +77,7 @@ app.get("/", (req, res) => {
   }
 });
 
+// returns URL DB as a json file
 app.get("/urls.json", (req, res) => {
   let templateVars = {
     user: users[req.session["user_id"]]
@@ -84,11 +85,7 @@ app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
 
-app.get("/hello", (req, res) => {
-  res.send("<html><body>Hello <b>World</b></body></html>\n");
-});
-
-//filtering users db for user-specific dbxs
+// filters URL DB and returns URLs that belong to a specific user
 function urlsForUser(id) {
   let filteredObj = {};
   for (let k in urlDatabase) {
@@ -99,17 +96,16 @@ function urlsForUser(id) {
   return filteredObj;
 }
 
-//on request of /urls
+// returns the management page for the user's URLs
 app.get("/urls", (req, res) => {
   let templateVars = {
     urls: urlsForUser(req.session["user_id"]),
     user: users[req.session["user_id"]]
    };
-
   res.render("urls_index", templateVars);
 });
 
-//registration request comes in
+// serves the registration form
 app.get("/register", (req, res) => {
   let templateVars = {
     user: users[req.session["user_id"]]
@@ -117,7 +113,7 @@ app.get("/register", (req, res) => {
   res.render("register", templateVars);
 });
 
-//registration form
+// handler for submitting registration form
 app.post("/register", (req, res) => {
   let newUser = {
     id: generateRandomString(),
@@ -141,12 +137,14 @@ app.post("/register", (req, res) => {
     }
   }
 
+  // add user to DB
   users[newUser["id"]] = newUser;
+  // set a login cookie in the user's browser
   req.session.user_id = newUser["id"];
   res.redirect("/urls");
 });
 
-//login request
+// handler for the login page
 app.get("/login", (req, res) => {
   let templateVars = {
     user: users[req.session["user_id"]]
@@ -154,7 +152,7 @@ app.get("/login", (req, res) => {
   res.render("login", templateVars);
 });
 
-//login entry
+// handler for login submission
 app.post("/login", (req, res) => {
   for (let userKey in users) {
     if (req.body.email === users[userKey].email
@@ -168,13 +166,13 @@ app.post("/login", (req, res) => {
   res.end("nope -- try again");
 });
 
-//logout
+// handler for logout
 app.post("/logout", (req, res) => {
   req.session = null;
   res.redirect("/urls");
 });
 
-//new urls get entered here
+// handler for new URL entry form
 app.get("/urls/new", (req, res) => {
   let templateVars = {
     user: users[req.session["user_id"]]
@@ -186,7 +184,7 @@ app.get("/urls/new", (req, res) => {
   }
 });
 
-//redirects to shortURL page featuring one entry
+// redirects to URL management page
 app.get("/urls/:id/edit", (req, res) => {
   let templateVars = {
     user: users[req.session["user_id"]]
@@ -195,7 +193,7 @@ app.get("/urls/:id/edit", (req, res) => {
   res.redirect(`/urls/${shortURL}`, templateVars);
 });
 
-///urls/any short URL, including ones that don't exist
+// handler for management page
 app.get("/urls/:id", (req, res) => {
   if (!urlDatabase[req.params.id]) {
     res.end("oops \ncheck your URL");
@@ -212,13 +210,13 @@ app.get("/urls/:id", (req, res) => {
   }
 });
 
-//deletes an entry
+// URL deletion handler
 app.post("/urls/:id/delete", (req, res) => {
   delete urlDatabase[req.params.id];
   res.redirect("/urls");
 });
 
-//updates short urls
+// handles updates to short URLs
 app.post("/urls/:id", (req, res) => {
   let shortURL = req.params.id;
   let longURL = req.body.longURL;
@@ -226,6 +224,7 @@ app.post("/urls/:id", (req, res) => {
   res.redirect("/urls");
 });
 
+// start server
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });

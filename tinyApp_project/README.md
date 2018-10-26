@@ -8,7 +8,7 @@ Below is a step-by-step of all you need to know to make use of this application:
 
 step 1 -- register / login:
 
-  Enter any valid email and password, and you'll have your very own trolly (or repository) created into which you can add, edit and delete urls -- all after running them through our propriotary shrinking technology.
+  Enter any valid email and password, and you'll have created your very own trolly (aka repository) into which you can add, edit and delete urls -- **all after running them through our propriotary shrinking technology**.
 
   !["registration page"](https://github.com/Romadiansky/week2day2/blob/master/tinyApp_project/docs/register_page.png?raw=true)
 
@@ -35,6 +35,6 @@ step 3 -- manage your trolly:
 
 ## Getting Started
 
-  - Install all necessary dependencies using the 'npm install' command
-  - Run the development web server using 'node express_server.js'
-  - And enjoy a tidier, smaller world of more concise urls
+1. Install all necessary dependencies using the 'npm install' command
+2. Run the development web server using 'node express_server.js'
+3. And enjoy a tidier, smaller world of more concise URL's
